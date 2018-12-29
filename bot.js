@@ -4,7 +4,7 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const prefix = process.env.DEFAULT_PREFIX;
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const rollChannelId = '528337374632214530';
+const rollChannelId = process.env.DND_CHANNEL;
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
