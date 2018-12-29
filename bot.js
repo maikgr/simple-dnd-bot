@@ -22,9 +22,14 @@ client.on('error', (err) => {
 
 client.on('message', (message) => {
     if (!message.content.startsWith(prefix)
-        || message.channel.id !== rollChannelId
         || message.author.bot) return;
 
+    console.log(`[${message.channel.name}] ${message.author.username}: ${message.content}`);
+
+    if (message.channel.id !== rollChannelId) {
+        return;
+    }
+    
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
     const command = client.commands.get(commandName)
