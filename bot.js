@@ -13,7 +13,7 @@ for (const file of commandFiles) {
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    client.user.setActivity('to your selfish request.', { type: "LISTENING" });
+    client.user.setActivity('your selfish request.', { type: "LISTENING" });
 });
 
 client.on('error', (err) => {
