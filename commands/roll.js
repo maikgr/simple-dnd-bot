@@ -1,19 +1,19 @@
 const seedRandom = require('seedrandom');
 
-const errorMessage = `Incorrect command usage.\nCommand syntax: \`${process.env.DEFAULT_PREFIX}${this.name} ${this.usage}\``;
-
 module.exports = {
     name: 'roll',
     aliases: ['r', 'rolls'],
-    description: 'Roll dice of any number. Example: `.roll 1d6` to roll a d6 one time, and `.roll 2d12` to roll a d12 two times.',
+    description: 'Roll dice of any number.',
     args: true,
     cooldown: 3,
     globalCooldown: false,
-    usage: '[1d6]'
+    usage: '[amount + d + eyes]  Example: .roll 1d6 to roll a d6 one time, and .roll 2d12 to roll a d12 two times.'
 };
+
 
 module.exports.execute = function (message, args) {
     const param = args[0];
+    const errorMessage = `Incorrect command usage.\nCommand syntax: \`${process.env.DEFAULT_PREFIX}${this.name} ${this.usage}\``;
     if (!param.includes('d')) {
         return message.reply(errorMessage);
     }
@@ -21,7 +21,7 @@ module.exports.execute = function (message, args) {
     let eyes;
     let amount = 1;
     if (param.startsWith('d')) {
-        eyes = Number.parseInt('a'.substring(1));
+        eyes = Number.parseInt(param.substring(1));
     }
     else {
         const dieArgs = param.split('d');
@@ -34,7 +34,7 @@ module.exports.execute = function (message, args) {
     }
 
     if (amount > 12) {
-        return message.reply("You're rolling to many dice!");
+        return message.reply("You're rolling too many dice!");
     }
 
     let result = [];
@@ -42,7 +42,7 @@ module.exports.execute = function (message, args) {
         result.push(`\`${rollDie(eyes)}\``);
     }
 
-    return message.reply(`Roll result: ${result.join(', ')}`)
+    return message.channel.send(`${message.author.username} roll result: ${result.join(', ')}`)
 }
 
 function rollDie(max) {

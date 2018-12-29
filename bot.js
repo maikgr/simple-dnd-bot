@@ -4,7 +4,7 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const prefix = process.env.DEFAULT_PREFIX;
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
+const rollChannelId = '528337374632214530';
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
@@ -22,6 +22,7 @@ client.on('error', (err) => {
 
 client.on('message', (message) => {
     if (!message.content.startsWith(prefix)
+        || message.channel.id !== rollChannelId
         || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
