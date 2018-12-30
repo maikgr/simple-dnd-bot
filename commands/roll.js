@@ -12,34 +12,38 @@ module.exports = {
 
 
 module.exports.execute = function (message, args) {
-    const param = args[0];
-    const errorMessage = `Incorrect command usage.\nCommand syntax: \`${process.env.DEFAULT_PREFIX}${this.name} ${this.usage}\``;
-    if (!param.includes('d')) {
-        return message.reply(errorMessage);
-    }
-
-    let eyes;
-    let amount = 1;
-    if (param.startsWith('d')) {
-        eyes = Number.parseInt(param.substring(1));
-    }
-    else {
-        const dieArgs = param.split('d');
-        eyes = Number.parseInt(dieArgs[1]);
-        amount = Number.parseInt(dieArgs[0]);
-    }
-
-    if (!eyes || eyes === NaN || amount === NaN) {
-        return message.reply(errorMessage);
-    }
-
-    if (amount > 12) {
-        return message.reply("You're rolling too many dice!");
-    }
-
     let result = [];
-    for(let i = 0; i < amount; ++i) {
-        result.push(`\`${rollDie(eyes)}\``);
+    for (let i = 0; i < args.length; ++i) {
+        const param = args[i];
+        console.log(`Parsing ${param}`);
+        const errorMessage = `Incorrect command usage.\nCommand syntax: \`${process.env.DEFAULT_PREFIX}${this.name} ${this.usage}\``;
+        if (!param.includes('d')) {
+            return message.reply(errorMessage);
+        }
+
+        let eyes;
+        let amount = 1;
+        if (param.startsWith('d')) {
+            eyes = Number.parseInt(param.substring(1));
+        }
+        else {
+            const dieArgs = param.split('d');
+            eyes = Number.parseInt(dieArgs[1]);
+            amount = Number.parseInt(dieArgs[0]);
+        }
+
+        if (!eyes || eyes === NaN || amount === NaN) {
+            return message.reply(errorMessage);
+        }
+
+        if (amount > 12) {
+            return message.reply("You're rolling too many dice!");
+        }
+        
+        console.log(`Rolling ${eyes} die ${amount} times`);
+        for(let j = 0; j < amount; ++j) {
+            result.push(`\`${rollDie(eyes)}\``);
+        }
     }
 
     return message.channel.send(`${message.author.username} roll result: ${result.join(', ')}`)
