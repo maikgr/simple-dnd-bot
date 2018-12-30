@@ -12,7 +12,6 @@ module.exports = {
 
 
 module.exports.execute = function (message, args) {
-    let result = [];
     for (let i = 0; i < args.length; ++i) {
         const param = args[i];
         console.log(`Parsing ${param}`);
@@ -41,12 +40,13 @@ module.exports.execute = function (message, args) {
         }
         
         console.log(`Rolling ${eyes} die ${amount} times`);
+        let result = [];
         for(let j = 0; j < amount; ++j) {
             result.push(`\`${rollDie(eyes)}\``);
         }
-    }
 
-    return message.channel.send(`${message.author.username} roll result: ${result.join(', ')}`)
+        return message.channel.send(`${message.author.username} \`${param}\` roll result: ${result.join(', ')}`);
+    }
 }
 
 function rollDie(max) {
