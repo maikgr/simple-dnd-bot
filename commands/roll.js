@@ -7,29 +7,22 @@ module.exports = {
     args: true,
     cooldown: 3,
     globalCooldown: false,
-    usage: '[amount + d + eyes]  Example: .roll 1d6 to roll a d6 one time, and .roll 2d12 to roll a d12 two times.'
+    usage: '[amount + d + eyes]  Example: .roll 1d6 to roll a d6 one time, and .roll 2d12 to roll a d12 two times.',
+    ownerOnly: false
 };
 
 
 module.exports.execute = function (message, args) {
+    const errorMessage = `Incorrect command usage.\nCommand syntax: \`${process.env.DEFAULT_PREFIX}${this.name} ${this.usage}\``;
+
     for (let i = 0; i < args.length; ++i) {
         const param = args[i];
-        console.log(`Parsing ${param}`);
-        const errorMessage = `Incorrect command usage.\nCommand syntax: \`${process.env.DEFAULT_PREFIX}${this.name} ${this.usage}\``;
         if (!param.includes('d')) {
             return message.reply(errorMessage);
         }
 
-        let eyes;
-        let amount = 1;
-        if (param.startsWith('d')) {
-            eyes = Number.parseInt(param.substring(1));
-        }
-        else {
-            const dieArgs = param.split('d');
-            eyes = Number.parseInt(dieArgs[1]);
-            amount = Number.parseInt(dieArgs[0]);
-        }
+        const eyes = parseEyes(param);
+        const amount = parseAmount(param);
 
         if (!eyes || eyes === NaN || amount === NaN) {
             return message.reply(errorMessage);
@@ -39,17 +32,33 @@ module.exports.execute = function (message, args) {
             return message.reply("You're rolling too many dice!");
         }
         
-        console.log(`Rolling ${eyes} die ${amount} times`);
-        let result = [];
-        for(let j = 0; j < amount; ++j) {
-            result.push(`\`${rollDie(eyes)}\``);
-        }
-
-        return message.channel.send(`${message.author.username} \`${param}\` roll result: ${result.join(', ')}`);
+        const result = rollDie(eyes, amount);
+        message.channel.send(`${message.author.username} \`${param}\` roll result: ${result.join(', ')}`);
     }
+
+    return;
 }
 
-function rollDie(max) {
+function rollDie(die, amount) {
+    let result = [];
     Math.seedrandom();
-    return Math.floor((max * Math.random())) + 1
+    for(let j = 0; j < amount; ++j) {
+        const dieResult = Math.floor((die * Math.random())) + 1;
+        result.push(`\`${dieResult}\``);
+    }
+    return result;
+}
+
+function parseEyes(str) {
+    if (str.startsWith('d')) {
+        return Number.parseInt(str.substring(1));
+    }
+    return Number.parseInt(str.split('d').pop());
+}
+
+function parseAmount(str) {
+    if (str.startsWith('d')) {
+        return 1;
+    }
+    return Number.parseInt(str.split('d').shift());
 }

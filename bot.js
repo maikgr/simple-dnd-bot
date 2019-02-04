@@ -1,10 +1,10 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+const context = require('./services/context');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const prefix = process.env.DEFAULT_PREFIX;
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const rollChannelId = process.env.DND_CHANNEL;
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
@@ -24,9 +24,8 @@ client.on('message', (message) => {
     if (!message.content.startsWith(prefix)
         || message.author.bot) return;
 
-    console.log(`[${message.channel.name}] ${message.author.username}: ${message.content}`);
-
-    if (message.channel.id !== rollChannelId) {
+    const registeredChannels = context.getChannels();
+    if (!registeredChannels.includes(message.channel.id)) {
         return;
     }
     
