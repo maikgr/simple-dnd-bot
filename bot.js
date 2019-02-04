@@ -47,7 +47,9 @@ client.on('message', (message) => {
     }
 
     try {
-        command.execute(message, args);
+        if (!command.ownerOnly || message.author.id == process.env.OWNER_ID) {
+            command.execute(message, args);
+        }
     } catch (error) {
         console.error(error);
         message.reply("Error executing command!");
