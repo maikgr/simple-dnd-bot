@@ -1,13 +1,14 @@
-const db = require('./db-client');
+const db = require('./settings-client');
 
 let channels = [];
 
 async function initialize() {
     const settings = await db.getSettings();
-    channels = settings.channels;
+    channels = settings && settings.channels;
 }
 
 module.exports.getChannels = function () {
+    initialize();
     return channels;
 }
 

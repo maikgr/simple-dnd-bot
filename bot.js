@@ -13,7 +13,7 @@ for (const file of commandFiles) {
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    client.user.setActivity('your fate unfold.', { type: "WATCHING" });
+    client.user.setActivity('your fate unfold. v1.1', { type: "WATCHING" });
 });
 
 client.on('error', (err) => {
@@ -23,11 +23,6 @@ client.on('error', (err) => {
 client.on('message', (message) => {
     if (!message.content.startsWith(prefix)
         || message.author.bot) return;
-
-    const registeredChannels = context.getChannels();
-    if (!registeredChannels.includes(message.channel.id)) {
-        return;
-    }
     
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
@@ -35,6 +30,11 @@ client.on('message', (message) => {
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
     if (!command) return;
+
+    const registeredChannels = context.getChannels();
+    if (!registeredChannels || !registeredChannels.includes(message.channel.id)) {
+        return;
+    }
 
     if (command.args && !args.length) {
         let reply = "Incorrect command usage.";
