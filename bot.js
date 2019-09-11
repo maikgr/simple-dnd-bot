@@ -13,7 +13,7 @@ for (const file of commandFiles) {
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    client.user.setActivity('your fate unfold. v1.1', { type: "WATCHING" });
+    client.user.setActivity('your fate unfold. v2.0', { type: "WATCHING" });
 });
 
 client.on('error', (err) => {

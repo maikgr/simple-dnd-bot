@@ -8,46 +8,85 @@ Connection.on('connected', console.log.bind(console, 'connected to data service'
 Connection.on('disconnected', console.log.bind(console, 'disconnected from data service'));
 
 let DataSchema = new Schema({
-    session: String,
-    inventory: {}
+    guild: String,
+    session:  String,
+    dm: String,
+    active: Boolean,
+    inventory: Object
 });
 
 let DndData = mongoose.model('dnd-data', DataSchema, 'dnd-data')
 
-module.exports.getInventory = async function () {
-    const data = await DndData.findOne().exec();
-    return data.inventory;
+async function get(guild) {
+    return await DndData.findOne({ guild, active: true}).exec();
 }
 
-module.exports.addItem = async function (item, amount) {
-    let inventory = await this.getInventory();
+async function update(guild, inventory) {
+    return await DndData.findOneAndUpdate({ guild, active: true}, { inventory }, { new: true }).exec();
+}
 
-    if (inventory && inventory[item]) {
-        inventory[item] += amount * 1;
+module.exports.getInventory = async function (guild, user) {
+    const inv = await get(guild);
+    if (user) {
+        return inv[user];
+    }
+    return inv.shared;
+}
+
+module.exports.addItem = async function (guild, item, amount, user) {
+    let inv = await get(guild);
+    let current = inv.shared;
+    if (user) {
+        current = inv[user];
+    }
+    
+    if (current && current[item]) {
+        current[item] += amount;
     }
     else {
-        inventory[item] = amount;
+        current[item] = amount;
     }
 
-    return DndData.findOneAndUpdate(null, { inventory: inventory }, { new: true }).exec();
+    let updatedInv = await update(guild, inv);
+    if (user) {
+        return updatedInv[user];
+    }
+    return updatedInv.shared;
 }
 
-module.exports.removeItem = async function (item, amount) {
-    let inventory = await this.getInventory();
+module.exports.useItem = async function (guild, item, amount, user) {
+    let inv = await get(guild);
+    let current = inv.shared;
+    if (user) {
+        current = inv[user];
+    }
 
-    if (inventory && inventory[item]) {
-        const left = Math.max(0, inventory[item] - amount);
+    if (current && current[item]) {
+        const left = Math.max(0, current[item] - amount);
         if (left === 0) {
-            delete inventory[item];
+            delete current[item];
         }
         else {
-            inventory[item] = left;
+            current[item] = left;
         }
     }
 
-    return DndData.findOneAndUpdate(null, { inventory: inventory }, { new: true }).exec();
+    let updatedInv = await update(guild, inv);
+    if (user) {
+        return updatedInv[user];
+    }
+    return updatedInv.shared;
 }
 
-module.exports.clear = async function () {
-    return DndData.findOneAndUpdate(null, { inventory: {} }, { new: true }).exec();
+module.exports.clear = async function (guild, user) {
+    let inv = await get(guild);
+    if (user) {
+        inv[user] = {};
+    }
+    else {
+        inv.shared = {};
+    }
+
+    await update(guild, inv);
+    return null;
 }

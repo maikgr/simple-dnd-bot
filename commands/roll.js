@@ -10,7 +10,6 @@ module.exports = {
     usage: '[amount + d + eyes]  Example: .roll 1d6 to roll a d6 one time, and .roll 2d12 to roll a d12 two times.'
 };
 
-
 module.exports.execute = function (message, args) {
     const errorMessage = `Incorrect command usage.\nCommand syntax: \`${process.env.DEFAULT_PREFIX}${this.name} ${this.usage}\``;
 
@@ -23,7 +22,7 @@ module.exports.execute = function (message, args) {
         const eyes = parseEyes(param);
         const amount = parseAmount(param);
 
-        if (!eyes || eyes === NaN || amount === NaN) {
+        if (!eyes || !amount) {
             return message.reply(errorMessage);
         }
 
@@ -49,15 +48,36 @@ function rollDie(die, amount) {
 }
 
 function parseEyes(str) {
+    let eyes;
     if (str.startsWith('d')) {
-        return Number.parseInt(str.substring(1));
+        eyes = str.substring(1);
     }
-    return Number.parseInt(str.split('d').pop());
+    else {
+        eyes = str.split('d').pop();
+    }
+
+    const addition = eyes.split('+')[1];
+    const subtraction = eyes.split('-')[1];
+    if (!isNaN(eyes)) {
+        let result = Number.parseInt(eyes);
+        if (addition && !isNaN(addition)) {
+            return result + Number.parseInt(addition);
+        }
+        else if (subtraction && !isNaN(subtraction)) {
+            return result + Number.parseInt(subtraction);
+        }
+        return result;
+    }
+    return null;
 }
 
 function parseAmount(str) {
     if (str.startsWith('d')) {
         return 1;
     }
-    return Number.parseInt(str.split('d').shift());
+    let amount = str.split('d').shift();
+    if (!isNaN(amount)) {
+        return Number.parseInt(amount);
+    }
+    return null;
 }
