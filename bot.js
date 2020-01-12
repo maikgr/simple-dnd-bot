@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
 const fs = require('fs');
-const context = require('./services/context');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
+const api = require('./api/index');
 const prefix = process.env.DEFAULT_PREFIX;
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
@@ -13,7 +13,7 @@ for (const file of commandFiles) {
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    client.user.setActivity('your fate unfold. v2.0', { type: "WATCHING" });
+    api(client);
 });
 
 client.on('error', (err) => {
@@ -30,11 +30,6 @@ client.on('message', (message) => {
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
     if (!command) return;
-
-    const registeredChannels = context.getChannels();
-    if (!registeredChannels || !registeredChannels.includes(message.channel.id)) {
-        return;
-    }
 
     if (command.args && !args.length) {
         let reply = "Incorrect command usage.";
@@ -57,3 +52,5 @@ client.on('message', (message) => {
 });
 
 client.login(process.env.BOT_TOKEN);
+
+module.exports = client;

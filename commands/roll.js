@@ -5,8 +5,6 @@ module.exports = {
     aliases: ['r', 'rolls'],
     description: 'Roll dice of any number.',
     args: true,
-    cooldown: 3,
-    globalCooldown: false,
     usage: '[amount + d + eyes]  Example: .roll 1d6 to roll a d6 one time, and .roll 2d12 to roll a d12 two times.'
 };
 
