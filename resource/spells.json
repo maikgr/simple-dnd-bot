@@ -1,0 +1,90 @@
+[
+  {
+    "element":"ice",
+    "spells":[
+      "Frostbolt",
+      "Cone of Cold",
+      "Frost Nova",
+      "Freeze",
+      "Icicle Shot",
+      "Blizzard",
+      "Wall of Ice",
+      "Slippery Ground",
+      "Frigid Enhancement: Blunt",
+      "Construct Ice",
+      "Lower Temperature of Room",
+      "Winter Enhancement: Force Sneeze",
+      "Brutal Enhancement: Hailstorm",
+      "Snow Golem",
+      "Cool Mantle",
+      "Ice Golem",
+      "Raging Blizzard"
+    ]
+  },
+  {
+    "element":"water",
+    "spells":[
+      "Splash",
+      "Hydro Cannon",
+      "Big Wave",
+      "Bubble Gun",
+      "Gigantic Ball of Water",
+      "Directional Geyser",
+      "Whirlpool",
+      "Summon Waterfall",
+      "Fluid Enhancement: Throw Fish",
+      "Barrel of Water",
+      "Rain",
+      "Gardening Enhancement: Water Gun",
+      "Spongy Enhancement: Store Water",
+      "Water Elemental",
+      "Waterwalking Boots",
+      "Hydro Cannon on Steroids",
+      "Drown"
+    ]
+  },
+  {
+    "element":"wind",
+    "spells":[
+      "Gust",
+      "Updraft",
+      "Featherfall",
+      "Glide",
+      "Hurricane",
+      "Zappy Laser",
+      "Summon Cloud",
+      "Rainbow Beam",
+      "Flighty Enhancement: Levitation",
+      "Pocket Fan",
+      "Sonic Boom",
+      "Javelin Enhancement: Weightlessness",
+      "Extra-terrestrial Enhancement: Oxygen Provider",
+      "Wind Elemental",
+      "Thunderbolt",
+      "Lightningstorm",
+      "Arc Blast"
+    ]
+  },
+  {
+    "element":"earth",
+    "spells":[
+      "Rock Toss",
+      "Healing Flowers",
+      "Ensnare",
+      "Mudtrap",
+      "Tremor",
+      "Vine Lash",
+      "Intoxicate",
+      "Rock Spikes",
+      "Sturdy Enhancement: Blunt",
+      "Perfectly Round Stone",
+      "Gemspring",
+      "Verdant Enhancement: Command Plant",
+      "Wild Enhancement: Tame Beast",
+      "Animal Companion",
+      "Steel Barricade",
+      "Iron Body",
+      "Fissure"
+    ]
+  }
+]
