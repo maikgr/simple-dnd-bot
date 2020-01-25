@@ -5,7 +5,7 @@ module.exports = {
     aliases: ['r', 'rolls'],
     description: 'Roll dice of any number.',
     args: true,
-    usage: '[amount + d + eyes]  Example: .roll 1d6 to roll a d6 one time, and .roll 2d12 to roll a d12 two times.'
+    usage: '.r 1d6 to roll a d6 one time \n.r 2d12 to roll a d12 two times \n.r 2d6+3 to add 3 into the last result of dice roll.'
 };
 
 module.exports.execute = function (message, args) {
